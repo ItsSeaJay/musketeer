@@ -1,2 +1,6 @@
+# Ignore any CodeIgniter files that show up from 
+CodeIgniter-*
 *.zip
-CodeIgniter-3.1.9
+application
+system
+index.php
