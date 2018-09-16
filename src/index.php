@@ -1,24 +1,19 @@
 <?php
-// Obtain the list of CodeIgniter releases as an Atom feed
-$feed = simplexml_load_file('https://github.com/bcit-ci/CodeIgniter/releases.atom');
+?>
+<!-- This is the form where the user can specify con -->
+<html>
+	<head>
+		<title>Installer</title>
+	</head>
+	<body>
+		<form action="install.php" method="POST">
+			<b><label for="base_url">Base URL</label></b>
+			<p>
+				This is the URL which CodeIgniter uses to check it's files exist.
+			</p>
+			<input type="text" name="base_url">
 
-// Use the latest release number to construct the download URL
-// (assuming that each entry is in chronological order with the newest first)
-// e.g. https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip
-$latest_version = $feed->entry[0]->title;
-$download_url = 'https://github.com/bcit-ci/CodeIgniter/archive/'.$latest_version.'.zip';
-
-// Download that version of CodeIgniter to the server as a `.zip` file
-$file_name = 'CodeIgniter-'.$latest_version.'.zip';
-file_put_contents($file_name, fopen($download_url, 'r'));
-
-// Unzip the contents of that file to the root
-$zip = new ZipArchive;
-
-if (($zip->open($file_name)) === TRUE)
-{
-	$zip->extractTo('');
-	$zip->close();
-
-	echo 'Extracted zip archive';
-}
+			<input type="submit">
+		</form>
+	</body>
+</html>
