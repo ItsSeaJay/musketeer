@@ -19,3 +19,4 @@ application/logs/*
 #sublime text 3
 *.sublime-project
 *.sublime-workspace
+build/

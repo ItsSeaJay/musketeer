@@ -53,6 +53,11 @@ function recursive_delete($source)
  */
 class Installer {
 
+	public function __construct($templates = array())
+	{
+		$this->templates = array();
+	}
+
 	/**
 	* Installs the CodeIgniter framework to the given destination
 	*/
@@ -129,16 +134,6 @@ class Installer {
 		$latest_version = $feed->entry[0]->title;
 
 		return $latest_version;
-	}
-
-	private function get_templates()
-	{
-		$templates = array();
-		$templates['config'] = file_get_contents($destination.'templates\\config.txt');
-		$templates['database'] = file_get_contents($destination.'templates\\database.txt');
-		$templates['index'] = file_get_contents($destination.'templates\\index.txt');
-
-		return $templates;
 	}
 }
 
