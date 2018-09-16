@@ -1,35 +1,32 @@
 <?php
 function recursive_copy($source, $destination)
 {
-	if (!is_dir($destination))
-	{
-		$dir = opendir($source);
-		mkdir($destination);
+	$dir = opendir($source);
+	mkdir($destination);
 
-		while (FALSE !== ($file = readdir($dir)))
+	while (FALSE !== ($file = readdir($dir)))
+	{
+		if (($file != '.') AND ($file != '..'))
 		{
-			if (($file != '.') AND ($file != '..'))
+			if (is_dir($source.'/'.$file))
 			{
-				if (is_dir($source.'/'.$file))
-				{
-					recursive_copy($source.'/'.$file, $destination.'/'.$file);
-				}
-				else
-				{
-					copy($source.'/'.$file, $destination.'/'.$file);
-				}
+				recursive_copy($source.'/'.$file, $destination.'/'.$file);
+			}
+			else
+			{
+				copy($source.'/'.$file, $destination.'/'.$file);
 			}
 		}
-
-		closedir($dir);
 	}
+
+	closedir($dir);
 }
 
 function recursive_delete($source)
 {
 	$dir = opendir($source);
 
-    while(FALSE !== ($file = readdir($dir)) )
+    while(FALSE !== ($file = readdir($dir)))
     {
         if (($file != '.') && ($file != '..'))
         {
@@ -97,9 +94,17 @@ if (isset($_POST['submit']))
 
 	file_put_contents($folder_name.'\\application\\config\\database.php', $templates['database']);
 
-	// Move the necessary files into place
-	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\application', dirname(__FILE__).'\\application');
-	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\system', dirname(__FILE__).'\\system');
+	// Finally, write the index file from its template
+	
+
+	// Move the necessary files into place unless they already exist
+	if (is_dir(dirname(__FILE__).'\\application') AND is_dir(dirname(__FILE__).'\\system'))
+	{
+		recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\application', dirname(__FILE__).'\\application');
+		recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\system', dirname(__FILE__).'\\system');
+	}
+
+	copy(dirname(__FILE__).'CodeIgniter-'.$latest_version.'\\index.php', dirname(__FILE__).'\\index.php');
 
 	// Clean up any excess files left behind by the process
 	recursive_delete(dirname(__FILE__).'\\'.'CodeIgniter-'.$latest_version);
