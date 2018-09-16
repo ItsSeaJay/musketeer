@@ -36,3 +36,10 @@ file_put_contents($folder_name.'\\application\\config\\config.php', $templates['
 
 // Clean up any excess files left by the process
 unlink(dirname(__FILE__).'\\'.$file_name);
+?>
+<head>
+	<title>Installation Process</title>
+</head>
+<body>
+	<a href="index.php">Go Back</a>
+</body>
