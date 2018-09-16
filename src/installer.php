@@ -2,24 +2,24 @@
 function recursive_copy($source, $destination)
 {
 	$dir = opendir($source);
-	@mkdir($destination)
+	mkdir($destination);
 
-	while (($file = readdir($dir) !== FALSE)
+	while (FALSE !== ($file = readdir($dir)))
 	{
 		if (($file != '.') AND ($file != '..'))
 		{
 			if (is_dir($source.'/'.$file))
 			{
-				recursive_copy($source.'/'.$file, $destination.'/'.$file)
+				recursive_copy($source.'/'.$file, $destination.'/'.$file);
 			}
 			else
 			{
-
+				copy($source.'/'.$file, $destination.'/'.$file);
 			}
 		}
 	}
 
-	closedir($dir)
+	closedir($dir);
 }
 
 if (isset($_POST['submit']))
@@ -71,7 +71,7 @@ if (isset($_POST['submit']))
 
 	// Move the necessary files into place
 	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\application', dirname(__FILE__).'\\application');
-	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\application', dirname(__FILE__).'\\application');
+	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\system', dirname(__FILE__).'\\system');
 
 	// Clean up any excess files left behind by the process
 	unlink(dirname(__FILE__).'\\'.$file_name);
