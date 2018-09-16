@@ -35,9 +35,11 @@ class Installer {
 
 		// Get the site configuration from the previous form
 		$config['base_url'] = filter_var($_POST['base_url'], FILTER_SANITIZE_STRING) ?? 'http://example.com/';
+		$config['index_file'] = filter_var($_POST['index_file'], FILTER_SANITIZE_STRING) ?? 'index.php';
 
 		// Replace the information in the 'config' template with the user's configuration
 		$templates['config'] = str_replace('{base_url}', $config['base_url'], $templates['config']);
+		$templates['config'] = str_replace('{index_file}', $config['index_file'], $templates['config']);
 
 		// Store that information in the appropriate file
 		file_put_contents($folder_name.'application\\config\\config.php', $templates['config']);

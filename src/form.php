@@ -820,6 +820,12 @@
 					forward slash `/`, unless you're installing it into a subfolder.
 				</p>
 				<input class="u-full-width" type="text" name="base_url" placeholder="http://example.com/" required>
+				<!-- Index File -->
+				<b><p><label for="base_url">Index File*</label></p></b>
+				<p>
+					The name of the index file which CodeIgniter loads from.
+				</p>
+				<input class="u-full-width" type="text" name="index_file" value="index.php" required>
 
 				<hr>
 
