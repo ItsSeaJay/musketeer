@@ -1,25 +1,53 @@
 <?php
 function recursive_copy($source, $destination)
 {
-	$dir = opendir($source);
-	mkdir($destination);
-
-	while (FALSE !== ($file = readdir($dir)))
+	if (!is_dir($destination))
 	{
-		if (($file != '.') AND ($file != '..'))
+		$dir = opendir($source);
+		mkdir($destination);
+
+		while (FALSE !== ($file = readdir($dir)))
 		{
-			if (is_dir($source.'/'.$file))
+			if (($file != '.') AND ($file != '..'))
 			{
-				recursive_copy($source.'/'.$file, $destination.'/'.$file);
-			}
-			else
-			{
-				copy($source.'/'.$file, $destination.'/'.$file);
+				if (is_dir($source.'/'.$file))
+				{
+					recursive_copy($source.'/'.$file, $destination.'/'.$file);
+				}
+				else
+				{
+					copy($source.'/'.$file, $destination.'/'.$file);
+				}
 			}
 		}
-	}
 
-	closedir($dir);
+		closedir($dir);
+	}
+}
+
+function recursive_delete($source)
+{
+	$dir = opendir($source);
+
+    while(FALSE !== ($file = readdir($dir)) )
+    {
+        if (($file != '.') && ($file != '..'))
+        {
+            $full = $source . '/' . $file;
+
+            if (is_dir($full))
+            {
+                recursive_delete($full);
+            }
+            else
+            {
+                unlink($full);
+            }
+        }
+    }
+
+    closedir($dir);
+    rmdir($source);
 }
 
 if (isset($_POST['submit']))
@@ -74,10 +102,11 @@ if (isset($_POST['submit']))
 	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\system', dirname(__FILE__).'\\system');
 
 	// Clean up any excess files left behind by the process
+	recursive_delete(dirname(__FILE__).'\\'.'CodeIgniter-'.$latest_version);
 	unlink(dirname(__FILE__).'\\'.$file_name);
 
 	// Redirect the user to their new site
-	header('Location: '.'CodeIgniter-'.$latest_version);
+	header('Location: index.php');
 }
 else
 {
