@@ -25,7 +25,7 @@
 				<p>
 					The name of the account used to connect to your database
 				</p>
-				<input type="text" name="database_username" placeholder="root" required>
+				<input type="text" name="db_username" placeholder="root" required>
 			</div>
 			<!-- Database Username -->
 			<div class="form_group">

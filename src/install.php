@@ -23,9 +23,10 @@ if (($zip->open($file_name)) === TRUE)
 
 // Get a list of templates needed to complete the installation process
 $templates = array();
-$templates['config'] = file_get_contents(dirname(__FILE__).'\templates\config.txt');
+$templates['config'] = file_get_contents(dirname(__FILE__).'\\templates\\config.txt');
+$templates['database'] = file_get_contents(dirname(__FILE__).'\\templates\\database.txt');
 
-// Get the configuration from the previous form
+// Get the site configuration from the previous form
 $config['base_url'] = $_POST['base_url'] ?? 'http://example.com/';
 
 // Replace the information in the 'config' template with the user's configuration
@@ -34,12 +35,17 @@ $templates['config'] = str_replace('{base_url}', $config['base_url'], $templates
 // Store that information in the appropriate file
 file_put_contents($folder_name.'\\application\\config\\config.php', $templates['config']);
 
-// Clean up any excess files left by the process
+// Do the same for the database configuration
+$db['username'] = $_POST['db_username'] ?? '';
+$db['password'] = $_POST['db_password'] ?? '';
+
+$templates['database'] = str_replace('{username}', $db['username'], $templates['database']);
+$templates['database'] = str_replace('{password}', $db['password'], $templates['database']);
+
+file_put_contents($folder_name.'\\application\\config\\database.php', $templates['database']);
+
+// Clean up any excess files left behind by the process
 unlink(dirname(__FILE__).'\\'.$file_name);
-?>
-<head>
-	<title>Installation Process</title>
-</head>
-<body>
-	<a href="index.php">Go Back</a>
-</body>
+
+// Redirect the user to their new site
+header('Location: '.'CodeIgniter-'.$latest_version);
