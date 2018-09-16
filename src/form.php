@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		<h1>Configuration</h1>
-		<form action="installer.php" method="POST">
+		<form action="install.php" method="POST">
 			<input name="submit" type="hidden" value="true">
 
 			<h2>Site</h2>
