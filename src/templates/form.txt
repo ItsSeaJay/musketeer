@@ -25,7 +25,7 @@
 			<div class="form_group">
 				<b><p><label for="database_username">Database Username*</label></p></b>
 				<p>
-					The name of the account used to connect to your database
+					The name of the account used to connect to your database.
 				</p>
 				<input type="text" name="db_username" placeholder="root" required>
 			</div>
@@ -33,8 +33,8 @@
 			<div class="form_group">
 				<b><p><label for="db_password">Database Password</label></p></b>
 				<p>
-					This is the URL which CodeIgniter uses to find itself.
-					This is usually <?php?>
+					The password used to secure your database account,
+					if you have one.
 				</p>
 				<input type="password" name="db_password" value="root">
 			</div>

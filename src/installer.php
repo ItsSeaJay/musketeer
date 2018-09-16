@@ -1,4 +1,27 @@
 <?php
+function recursive_copy($source, $destination)
+{
+	$dir = opendir($source);
+	@mkdir($destination)
+
+	while (($file = readdir($dir) !== FALSE)
+	{
+		if (($file != '.') AND ($file != '..'))
+		{
+			if (is_dir($source.'/'.$file))
+			{
+				recursive_copy($source.'/'.$file, $destination.'/'.$file)
+			}
+			else
+			{
+
+			}
+		}
+	}
+
+	closedir($dir)
+}
+
 if (isset($_POST['submit']))
 {
 	$feed = simplexml_load_file('https://github.com/bcit-ci/CodeIgniter/releases.atom');
@@ -46,6 +69,10 @@ if (isset($_POST['submit']))
 
 	file_put_contents($folder_name.'\\application\\config\\database.php', $templates['database']);
 
+	// Move the necessary files into place
+	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\application', dirname(__FILE__).'\\application');
+	recursive_copy(dirname(__FILE__).'\\CodeIgniter-'.$latest_version.'\\application', dirname(__FILE__).'\\application');
+
 	// Clean up any excess files left behind by the process
 	unlink(dirname(__FILE__).'\\'.$file_name);
 
@@ -54,7 +81,7 @@ if (isset($_POST['submit']))
 }
 else
 {
-	// Show the form
+	// Show the form instead
 	$form = file_get_contents(dirname(__FILE__).'\\templates\\form.txt');
 	echo $form;
 }
