@@ -1,43 +1,60 @@
-<!-- This is the form where the user can specify config information -->
-<html>
-	<head>
-		<title>Installer</title>
-	</head>
-	<body>
-		<h1>Configuration</h1>
-		<form action="install.php" method="POST">
-			<h2>Site</h2>
-			<!-- Base URL -->
-			<div class="form_group">
-				<b><p><label for="base_url">Base URL*</label></p></b>
-				<p>
-					This is the URL which CodeIgniter uses to find itself.
-					It's usually the domain name of your website, followed by a
-					forward slash `/`, unless you're installing it into a subfolder.
-				</p>
-				<input type="text" name="base_url" placeholder="http://example.com/" required>
-			</div>
+<?php
+if (isset($_POST['submit']))
+{
+	$feed = simplexml_load_file('https://github.com/bcit-ci/CodeIgniter/releases.atom');
 
-			<h2>Database</h2>
-			<!-- Database Username -->
-			<div class="form_group">
-				<b><p><label for="database_username">Database Username*</label></p></b>
-				<p>
-					The name of the account used to connect to your database
-				</p>
-				<input type="text" name="db_username" placeholder="root" required>
-			</div>
-			<!-- Database Username -->
-			<div class="form_group">
-				<b><p><label for="db_password">Database Password</label></p></b>
-				<p>
-					This is the URL which CodeIgniter uses to find itself.
-					This is usually <?php?>
-				</p>
-				<input type="password" name="db_password" value="root">
-			</div>
+	// Use the latest release number to construct the download URL
+	// (assuming that each entry is in chronological order with the newest first)
+	// e.g. https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip
+	$latest_version = $feed->entry[0]->title;
+	$download_url = 'https://github.com/bcit-ci/CodeIgniter/archive/'.$latest_version.'.zip';
 
-			<input type="submit">
-		</form>
-	</body>
-</html>
+	// Download that version of CodeIgniter to the server as a `.zip` file
+	$file_name = 'CodeIgniter-'.$latest_version.'.zip';
+	$folder_name = dirname(__FILE__).'\\'.'CodeIgniter-'.$latest_version;
+	file_put_contents($file_name, fopen($download_url, 'r'));
+
+	// Unzip the contents of that file to the absolute path
+	$zip = new ZipArchive;
+
+	if (($zip->open($file_name)) === TRUE)
+	{
+		$zip->extractTo(dirname(__FILE__));
+		$zip->close();
+	}
+
+	// Get a list of templates needed to complete the installation process
+	$templates = array();
+	$templates['config'] = file_get_contents(dirname(__FILE__).'\\templates\\config.txt');
+	$templates['database'] = file_get_contents(dirname(__FILE__).'\\templates\\database.txt');
+
+	// Get the site configuration from the previous form
+	$config['base_url'] = $_POST['base_url'] ?? 'http://example.com/';
+
+	// Replace the information in the 'config' template with the user's configuration
+	$templates['config'] = str_replace('{base_url}', $config['base_url'], $templates['config']);
+
+	// Store that information in the appropriate file
+	file_put_contents($folder_name.'\\application\\config\\config.php', $templates['config']);
+
+	// Do the same for the database configuration
+	$db['username'] = $_POST['db_username'] ?? '';
+	$db['password'] = $_POST['db_password'] ?? '';
+
+	$templates['database'] = str_replace('{username}', $db['username'], $templates['database']);
+	$templates['database'] = str_replace('{password}', $db['password'], $templates['database']);
+
+	file_put_contents($folder_name.'\\application\\config\\database.php', $templates['database']);
+
+	// Clean up any excess files left behind by the process
+	unlink(dirname(__FILE__).'\\'.$file_name);
+
+	// Redirect the user to their new site
+	header('Location: '.'CodeIgniter-'.$latest_version);
+}
+else
+{
+	// Show the form
+	$form = file_get_contents(dirname(__FILE__).'\\templates\\form.txt');
+	echo $form;
+}
