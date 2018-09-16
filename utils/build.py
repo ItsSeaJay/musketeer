@@ -25,6 +25,7 @@ def install(destination):
 		'database': file_get_contents('src/templates/database.txt'),
 		'index': file_get_contents('src/templates/index.txt')
 	}
+	file_utils = file_get_contents('src/file_utils.php')
 	installer = file_get_contents('src/installer.php')
 	form = file_get_contents('src/form.php')
 	start_tag = file_get_contents('src/start_tag.php')
@@ -41,6 +42,7 @@ def install(destination):
 	for key, template in templates.items():
 		build += template + '\n\n'
 
+	build += file_utils
 	build += installer + '\n'
 	build += end_tag + '\n\n'
 	build += form
