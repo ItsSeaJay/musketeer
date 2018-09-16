@@ -1,4 +1,4 @@
-<?php
+$templates['index'] = '
 /**
  * CodeIgniter
  *
@@ -53,7 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	define(\'ENVIRONMENT\', isset($_SERVER[\'CI_ENV\']) ? $_SERVER[\'CI_ENV\'] : \'development\');
 
 /*
  *---------------------------------------------------------------
@@ -65,20 +65,20 @@
  */
 switch (ENVIRONMENT)
 {
-	case 'development':
+	case \'development\':
 		error_reporting(-1);
-		ini_set('display_errors', 1);
+		ini_set(\'display_errors\', 1);
 	break;
 
-	case 'testing':
-	case 'production':
-		ini_set('display_errors', 0);
+	case \'testing\':
+	case \'production\':
+		ini_set(\'display_errors\', 0);
 		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
 	break;
 
 	default:
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-		echo 'The application environment is not set correctly.';
+		header(\'HTTP/1.1 503 Service Unavailable.\', TRUE, 503);
+		echo \'The application environment is not set correctly.\';
 		exit(1); // EXIT_ERROR
 }
 
@@ -90,7 +90,7 @@ switch (ENVIRONMENT)
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = 'system';
+	$system_path = \'system\';
 
 /*
  *---------------------------------------------------------------
@@ -107,7 +107,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = 'application';
+	$application_folder = \'application\';
 
 /*
  *---------------------------------------------------------------
@@ -122,7 +122,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$view_folder = '';
+	$view_folder = \'\';
 
 
 /*
@@ -133,7 +133,7 @@ switch (ENVIRONMENT)
  * Normally you will set your default controller in the routes.php file.
  * You can, however, force a custom routing by hard-coding a
  * specific controller class/function here. For most applications, you
- * WILL NOT set your routing here, but it's an option for those
+ * WILL NOT set your routing here, but it\'s an option for those
  * special instances where you might want to override the standard
  * routing in a specific front controller that shares a common CI installation.
  *
@@ -146,13 +146,13 @@ switch (ENVIRONMENT)
  */
 	// The directory name, relative to the "controllers" directory.  Leave blank
 	// if your controller is not in a sub-directory within the "controllers" one
-	// $routing['directory'] = '';
+	// $routing[\'directory\'] = \'\';
 
 	// The controller class file name.  Example:  mycontroller
-	// $routing['controller'] = '';
+	// $routing[\'controller\'] = \'\';
 
 	// The controller function you wish to be called.
-	// $routing['function']	= '';
+	// $routing[\'function\']	= \'\';
 
 
 /*
@@ -169,7 +169,7 @@ switch (ENVIRONMENT)
  *
  * Un-comment the $assign_to_config array below to use this feature
  */
-	// $assign_to_config['name_of_config_item'] = 'value of config item';
+	// $assign_to_config[\'name_of_config_item\'] = \'value of config item\';
 
 
 
@@ -184,7 +184,7 @@ switch (ENVIRONMENT)
  */
 
 	// Set the current directory correctly for CLI requests
-	if (defined('STDIN'))
+	if (defined(\'STDIN\'))
 	{
 		chdir(dirname(__FILE__));
 	}
@@ -195,10 +195,10 @@ switch (ENVIRONMENT)
 	}
 	else
 	{
-		// Ensure there's a trailing slash
+		// Ensure there\'s a trailing slash
 		$system_path = strtr(
-			rtrim($system_path, '/\\'),
-			'/\\',
+			rtrim($system_path, \'/\\\'),
+			\'/\\\',
 			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
 		).DIRECTORY_SEPARATOR;
 	}
@@ -206,8 +206,8 @@ switch (ENVIRONMENT)
 	// Is the system path correct?
 	if ( ! is_dir($system_path))
 	{
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
+		header(\'HTTP/1.1 503 Service Unavailable.\', TRUE, 503);
+		echo \'Your system folder path does not appear to be set correctly. Please open the following file and correct this: \'.pathinfo(__FILE__, PATHINFO_BASENAME);
 		exit(3); // EXIT_CONFIG
 	}
 
@@ -217,16 +217,16 @@ switch (ENVIRONMENT)
  * -------------------------------------------------------------------
  */
 	// The name of THIS file
-	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
+	define(\'SELF\', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 	// Path to the system directory
-	define('BASEPATH', $system_path);
+	define(\'BASEPATH\', $system_path);
 
 	// Path to the front controller (this file) directory
-	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
+	define(\'FCPATH\', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 	// Name of the "system" directory
-	define('SYSDIR', basename(BASEPATH));
+	define(\'SYSDIR\', basename(BASEPATH));
 
 	// The path to the "application" directory
 	if (is_dir($application_folder))
@@ -238,8 +238,8 @@ switch (ENVIRONMENT)
 		else
 		{
 			$application_folder = strtr(
-				rtrim($application_folder, '/\\'),
-				'/\\',
+				rtrim($application_folder, \'/\\\'),
+				\'/\\\',
 				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
 			);
 		}
@@ -247,24 +247,24 @@ switch (ENVIRONMENT)
 	elseif (is_dir(BASEPATH.$application_folder.DIRECTORY_SEPARATOR))
 	{
 		$application_folder = BASEPATH.strtr(
-			trim($application_folder, '/\\'),
-			'/\\',
+			trim($application_folder, \'/\\\'),
+			\'/\\\',
 			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
 		);
 	}
 	else
 	{
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-		echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		header(\'HTTP/1.1 503 Service Unavailable.\', TRUE, 503);
+		echo \'Your application folder path does not appear to be set correctly. Please open the following file and correct this: \'.SELF;
 		exit(3); // EXIT_CONFIG
 	}
 
-	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
+	define(\'APPPATH\', $application_folder.DIRECTORY_SEPARATOR);
 
 	// The path to the "views" directory
-	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
+	if ( ! isset($view_folder[0]) && is_dir(APPPATH.\'views\'.DIRECTORY_SEPARATOR))
 	{
-		$view_folder = APPPATH.'views';
+		$view_folder = APPPATH.\'views\';
 	}
 	elseif (is_dir($view_folder))
 	{
@@ -275,8 +275,8 @@ switch (ENVIRONMENT)
 		else
 		{
 			$view_folder = strtr(
-				rtrim($view_folder, '/\\'),
-				'/\\',
+				rtrim($view_folder, \'/\\\'),
+				\'/\\\',
 				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
 			);
 		}
@@ -284,19 +284,19 @@ switch (ENVIRONMENT)
 	elseif (is_dir(APPPATH.$view_folder.DIRECTORY_SEPARATOR))
 	{
 		$view_folder = APPPATH.strtr(
-			trim($view_folder, '/\\'),
-			'/\\',
+			trim($view_folder, \'/\\\'),
+			\'/\\\',
 			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
 		);
 	}
 	else
 	{
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-		echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		header(\'HTTP/1.1 503 Service Unavailable.\', TRUE, 503);
+		echo \'Your view folder path does not appear to be set correctly. Please open the following file and correct this: \'.SELF;
 		exit(3); // EXIT_CONFIG
 	}
 
-	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+	define(\'VIEWPATH\', $view_folder.DIRECTORY_SEPARATOR);
 
 /*
  * --------------------------------------------------------------------
@@ -305,4 +305,5 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
-require_once BASEPATH.'core/CodeIgniter.php';
+require_once BASEPATH.\'core/CodeIgniter.php\';
+';

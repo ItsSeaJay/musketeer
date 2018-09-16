@@ -1,7 +1,9 @@
 import os
 import shutil
 
-# Clean out the CodeIgniter files present in the source folder
-shutil.rmtree('src/application')
-shutil.rmtree('src/system')
-os.remove('src/index.php')
+# Remove the build folder and its contents if they exist
+if os.path.exists('build'):
+	shutil.rmtree('build')
+
+# Notify the user on the command line
+print('Cleaned project folders.')

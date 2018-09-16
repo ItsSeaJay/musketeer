@@ -70,7 +70,7 @@ class Installer {
 
 		// Download that version of CodeIgniter to the server as a `.zip` file
 		$file_name = 'CodeIgniter-'.$latest_version.'.zip';
-		$folder_name = $desination.'CodeIgniter-'.$latest_version;
+		$folder_name = $destination.'CodeIgniter-'.$latest_version;
 		file_put_contents($file_name, fopen($download_url, 'r'));
 
 		// Unzip the contents of that file to the absolute path
@@ -81,9 +81,6 @@ class Installer {
 			$zip->extractTo($destination);
 			$zip->close();
 		}
-
-		// Get a list of templates needed to complete the installation process
-		$templates = $this->get_templates();
 
 		// Get the site configuration from the previous form
 		$config['base_url'] = $_POST['base_url'] ?? 'http://example.com/';
@@ -117,8 +114,8 @@ class Installer {
 		copy($destination.'CodeIgniter-'.$latest_version.'\\index.php', $destination.'\\index.php');
 
 		// Clean up any excess files left behind by the process
-		recursive_delete($desination.'CodeIgniter-'.$latest_version);
-		unlink($desination.$file_name);
+		recursive_delete($destination.'CodeIgniter-'.$latest_version);
+		unlink($destination.$file_name);
 
 		// Redirect the user to their new site
 		header('Location: index.php');
