@@ -20,27 +20,35 @@ def make_dir(path):
 		os.makedirs(path)
 
 def install(destination):
+	# Get all of the necessary files for building
 	templates = {
 		'config': file_get_contents('src/templates/config.txt'),
 		'database': file_get_contents('src/templates/database.txt'),
 		'index': file_get_contents('src/templates/index.txt')
 	}
 	installer = file_get_contents('src/installer.php')
-	build = ''
+	form = file_get_contents('src/form.php')
+	start_tag = file_get_contents('src/start_tag.php')
+	end_tag = file_get_contents('src/end_tag.php')
 
 	# Compile the built file as a string
-	for template in templates:
-		build += template
+	build = start_tag
 
-	build += template
+	for key, template in templates.items():
+		build += template + '\n'
+
+	build += installer + '\n'
+	build += end_tag + '\n'
+	build += form + '\n'
 
 	# Create a folder for the build if it doesn't already exist
 	make_dir(destination)
 
 	# Write the built file to the new folder
-	file_put_contents('build/install.php', build)
+	file_put_contents(destination + 'installer.php', build)
 
-	print('Built!')
+	# Alert the user
+	print('Built installer at ' + destination)
 
-
+# Run the install function
 install('build')
