@@ -27,10 +27,9 @@ def install(destination):
 	}
 	sources = {
 		'security_check': file_get_contents('src/security_check.php'),
-		'templates_array': file_get_contents('src/templates_array.php'),
 		'file_utils': file_get_contents('src/file_utils.php'),
 		'installer': file_get_contents('src/installer.php'),
-		'form': file_get_contents('src/form.php'),
+		'form': file_get_contents('src/form.php')
 	}
 	# Figure out where the final file should be built
 	build_path = destination + '/install.php'
