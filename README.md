@@ -1,2 +1,2 @@
-# foxglove-mythril
-Magic Installer for CodeIgniter
+# Musketeer
+An All-in-One Installer for CodeIgniter 3
