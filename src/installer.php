@@ -91,9 +91,9 @@ class Installer {
 	}
 }
 
-if (isset($_POST['base_url']))
+if (isset($_POST['base_url']) AND isset($_POST['install_path']))
 {
 	$installer = new Installer($templates);
-	$installer->install(dirname(__FILE__).'/');
+	$installer->install($_POST['install_path'].'/');
 }
 ?>

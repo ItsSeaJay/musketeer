@@ -9,6 +9,17 @@
 			<form class="u-full-width" action="install.php" method="POST">
 				<input name="submit" type="hidden" value="true">
 
+				<h2>Files</h2>
+				<!-- Destination -->
+				<b><p><label for="install_path">Install Path*</label></p></b>
+				<p>
+					Where to install CodeIgniter and its files on the server,
+					followed by a forward slash `/`.
+				</p>
+				<input class="u-full-width" type="text" name="install_path" value="<?php echo __DIR__ ?>" required>
+
+				<hr>
+
 				<h2>Site</h2>
 				<!-- Base URL -->
 				<b><p><label for="base_url">Base URL*</label></p></b>
@@ -19,11 +30,13 @@
 				</p>
 				<input class="u-full-width" type="text" name="base_url" placeholder="http://example.com/" required>
 				<!-- Index File -->
-				<b><p><label for="base_url">Index File*</label></p></b>
+				<b><p><label for="base_url">Separate Index File*</label></p></b>
 				<p>
-					The name of the index file which CodeIgniter loads from.
+					Whether the index file should have a folder to itself.
+					This is turned on by default to prevent people from accessing
+					sensitive files, but may not be supported on all servers.
 				</p>
-				<input class="u-full-width" type="text" name="index_file" value="index.php" required>
+				<input class="u-full-width" type="checkbox" name="index_file">
 
 				<hr>
 
