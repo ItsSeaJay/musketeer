@@ -34,14 +34,15 @@ def install(destination):
 	# Figure out where the final file should be built
 	build_path = destination + '/install.php'
 
-	# Compile the built file as a single, formatted string
+	# Compile the built file as a single, formatted string,
+	# making sure to declare the templates array in global space
 	build = '<?php' + '\n' + '$templates = array();' + '\n'
 
 	for key, template in templates.items():
-		build += '\n' + template.split('\n', 1)[1] + '\n\n'
+		build += '\n' + template.split('\n', 1)[1] + '\n'
 
 	for key, source in sources.items():
-		build += '\n' + source.split('\n', 1)[1] + '\n\n'
+		build += '\n' + source.split('\n', 1)[1] + '\n'
 
 	# Create a folder for the build if it doesn't already exist
 	make_dir(destination)

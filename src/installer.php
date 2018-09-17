@@ -76,7 +76,7 @@ class Installer {
 		unlink($destination.$file_name);
 
 		// Redirect the user to their new site
-		// header('Location: index.php');
+		header('Location: index.php');
 	}
 
 	/**
