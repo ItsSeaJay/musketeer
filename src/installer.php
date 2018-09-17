@@ -42,7 +42,7 @@ class Installer {
 		$config['index_file'] = $_POST['index_file'] ?? 'index.php';
 
 		// Replace the information in the 'config' template with the user's configuration
-		$this->templates['config'] = str_replace('{base_url}', $config['base_url'], $this->templates['config']);
+		$this->templates['config'] = '<?php'.str_replace('{base_url}', $config['base_url'], $this->templates['config']);
 		$this->templates['config'] = str_replace('{index_file}', $config['index_file'], $this->templates['config']);
 
 		// Store that information in the appropriate file
@@ -52,7 +52,7 @@ class Installer {
 		$db['username'] = $_POST['db_username'] ?? '';
 		$db['password'] = $_POST['db_password'] ?? '';
 
-		$this->templates['database'] = str_replace('{username}', $db['username'], $this->templates['database']);
+		$this->templates['database'] = '<?php'.str_replace('{username}', $db['username'], $this->templates['database']);
 		$this->templates['database'] = str_replace('{password}', $db['password'], $this->templates['database']);
 
 		file_put_contents($folder_name.'application/config/database.php', $this->templates['database']);
@@ -60,7 +60,7 @@ class Installer {
 		// Write the index file to the folder root from its template
 		// TODO: ensure the index file is in it's own folder,
 		//       or give them the option to do so
-		file_put_contents($destination.'index.php', $this->templates['index']);
+		file_put_contents($destination.'index.php', '<?php'.$this->templates['index']);
 
 		// Move the necessary files into place unless they already exist
 		if (!is_dir($destination.'application') AND !is_dir($destination.'/system'))
