@@ -11,12 +11,12 @@
 
 				<h2>Files</h2>
 				<!-- Destination -->
-				<b><p><label for="install_path">Install Path*</label></p></b>
+				<b><p><label for="destination">Destination Folder*</label></p></b>
 				<p>
 					Where to install CodeIgniter and its files on the server,
 					followed by a forward slash `/`.
 				</p>
-				<input class="u-full-width" type="text" name="install_path" value="<?php echo __DIR__ ?>" required>
+				<input class="u-full-width" type="text" name="destination" value="<?php echo __DIR__.'/' ?>" required>
 
 				<hr>
 
