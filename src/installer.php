@@ -1,3 +1,4 @@
+<?php
 /**
  * An installer for the CodeIgniter framework
  */
@@ -91,3 +92,4 @@ if (isset($_POST['base_url']))
 	$installer = new Installer();
 	$installer->install(dirname(__FILE__).'\\');
 }
+?>

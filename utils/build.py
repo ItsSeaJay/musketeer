@@ -25,27 +25,24 @@ def install(destination):
 		'database': file_get_contents('src/templates/database.txt'),
 		'index': file_get_contents('src/templates/index.txt')
 	}
-	file_utils = file_get_contents('src/file_utils.php')
-	installer = file_get_contents('src/installer.php')
-	form = file_get_contents('src/form.php')
-	start_tag = file_get_contents('src/start_tag.php')
-	end_tag = file_get_contents('src/end_tag.php')
-	templates_array = file_get_contents('src/templates_array.php')
-
-	# Define the full build path
+	sources = {
+		'security_check': file_get_contents('src/security_check.php'),
+		'templates_array': file_get_contents('src/templates_array.php'),
+		'file_utils': file_get_contents('src/file_utils.php'),
+		'installer': file_get_contents('src/installer.php'),
+		'form': file_get_contents('src/form.php'),
+	}
+	# Figure out where the final file should be built
 	build_path = destination + '/install.php'
 
 	# Compile the built file as a single, formatted string
-	build = start_tag + '\n\n'
-	build += '$templates = array();' + '\n\n';
+	build = '<?php' + '\n'
 
 	for key, template in templates.items():
-		build += template + '\n\n'
+		build += template.replace('<?php', '') + '\n\n'
 
-	build += file_utils
-	build += installer + '\n'
-	build += end_tag + '\n\n'
-	build += form
+	for key, source in sources.items():
+		build += source.replace('<?php', '') + '\n\n'
 
 	# Create a folder for the build if it doesn't already exist
 	make_dir(destination)
