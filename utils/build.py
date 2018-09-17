@@ -35,7 +35,10 @@ def install(destination):
 	build_path = destination + '/install.php'
 
 	# Compile the built file as a single, formatted string
-	build = '<?php' + '\n'
+	build = '''
+		<?php
+		$templates = array();
+	''' + '\n'
 
 	for key, template in templates.items():
 		build += template.replace('<?php', '') + '\n\n'

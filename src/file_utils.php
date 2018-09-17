@@ -1,3 +1,4 @@
+<?php
 // Define some utility functions to be used by the installer
 function recursive_copy($source, $destination)
 {
