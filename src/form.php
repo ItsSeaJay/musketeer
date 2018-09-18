@@ -26,9 +26,15 @@
 				<p>
 					This is the URL which CodeIgniter uses to find itself.
 					It's usually the domain name of your website, followed by a
-					forward slash `/`, unless you're installing it into a subfolder.
+					forward slash `/`. If you're installing it to a subfolder,
+					be sure to include that information. You must also ensure
+					that the protocol is included and correct.
 				</p>
-				<input class="u-full-width" type="text" name="base_url" placeholder="http://example.com/" value="<?php echo $_SERVER['DOCUMENT_ROOT'] ?>" required>
+				<input class="u-full-width" type="text" name="base_url" placeholder="http://example.com/" value="<?php echo str_replace(
+					basename($_SERVER['PHP_SELF']),
+					'',
+					(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
+				) ?>" required>
 				<!-- Index File -->
 				<b><p><label for="base_url">Separate Index File*</label></p></b>
 				<p>
