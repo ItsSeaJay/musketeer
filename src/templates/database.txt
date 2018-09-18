@@ -1,5 +1,6 @@
 <?php
 $templates['database'] = '
+<?php
 defined(\'BASEPATH\') OR exit(\'No direct script access allowed\');
 
 /*
@@ -79,7 +80,7 @@ $db[\'default\'] = array(
 	\'hostname\' => \'localhost\',
 	\'username\' => \'{username}\',
 	\'password\' => \'{password}\',
-	\'database\' => \'\',
+	\'database\' => \'{database}\',
 	\'dbdriver\' => \'mysqli\',
 	\'dbprefix\' => \'\',
 	\'pconnect\' => FALSE,

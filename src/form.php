@@ -16,7 +16,7 @@
 					Where to install CodeIgniter and its files on the server,
 					followed by a forward slash `/`.
 				</p>
-				<input class="u-full-width" type="text" name="destination" value="<?php echo __DIR__.'/' ?>" required>
+				<input class="u-full-width" type="text" name="destination" placeholder="/var/www/html/" value="<?php echo __DIR__.'/' ?>" required>
 
 				<hr>
 
@@ -28,7 +28,7 @@
 					It's usually the domain name of your website, followed by a
 					forward slash `/`, unless you're installing it into a subfolder.
 				</p>
-				<input class="u-full-width" type="text" name="base_url" placeholder="http://example.com/" required>
+				<input class="u-full-width" type="text" name="base_url" placeholder="http://example.com/" value="<?php echo $_SERVER['DOCUMENT_ROOT'] ?>" required>
 				<!-- Index File -->
 				<b><p><label for="base_url">Separate Index File*</label></p></b>
 				<p>
@@ -36,7 +36,7 @@
 					This is turned on by default to prevent people from accessing
 					sensitive files, but may not be supported on all servers.
 				</p>
-				<input class="u-full-width" type="checkbox" name="index_file">
+				<input class="u-full-width" type="checkbox" name="index_file" checked>
 
 				<hr>
 
