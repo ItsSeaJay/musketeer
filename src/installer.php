@@ -14,8 +14,15 @@ class Installer {
 	*/
 	public function install($destination = '')
 	{
+		// Define the configuration arrays that will be used later
 		$config = array();
 		$db = array();
+
+		// Create the destination folder if it doesn't already exist
+		if (!file_exists($destination))
+		{
+			mkdir($destination, 0777, TRUE);
+		}
 
 		// Use the latest release number to construct the download URL
 		// (assuming that each entry is in chronological order with the newest first)
@@ -24,14 +31,14 @@ class Installer {
 		$download_url = 'https://github.com/bcit-ci/CodeIgniter/archive/'.$latest_version.'.zip';
 
 		// Download that version of CodeIgniter to the server as a `.zip` file
-		$file_name = 'CodeIgniter-'.$latest_version.'.zip';
-		$folder_name = $destination.'CodeIgniter-'.$latest_version.'/';
-		file_put_contents($file_name, fopen($download_url, 'r'));
+		$archive_name = 'CodeIgniter-'.$latest_version.'.zip';
+		$folder_name = $destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR;
+		file_put_contents($archive_name, fopen($download_url, 'r'));
 
 		// Unzip the contents of that file to the absolute path
 		$zip = new ZipArchive;
 
-		if (($zip->open($file_name)) === TRUE)
+		if (($zip->open($archive_name)) === TRUE)
 		{
 			$zip->extractTo($destination);
 			$zip->close();
@@ -42,20 +49,39 @@ class Installer {
 		$config['index_file'] = $_POST['index_file'] ?? 'index.php';
 
 		// Replace the information in the 'config' template with the user's configuration
-		$this->templates['config'] = str_replace('{base_url}', $config['base_url'], $this->templates['config']);
-		$this->templates['config'] = str_replace('{index_file}', $config['index_file'], $this->templates['config']);
+		foreach ($config as $key => $value)
+		{
+			$this->templates['database'] = str_replace(
+				'{'.$key.'}',
+				$value,
+				$this->templates['config']
+			);
+		}
 
 		// Store that information in the appropriate file
-		file_put_contents($folder_name.'application/config/config.php', $this->templates['config']);
+		file_put_contents(
+			$folder_name.'application'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php',
+			$this->templates['config']
+		);
 
 		// Do the same for the database configuration
 		$db['username'] = $_POST['db_username'] ?? '';
 		$db['password'] = $_POST['db_password'] ?? '';
+		$db['database'] = $_POST['db_database'] ?? '';
 
-		$this->templates['database'] = str_replace('{username}', $db['username'], $this->templates['database']);
-		$this->templates['database'] = str_replace('{password}', $db['password'], $this->templates['database']);
+		foreach ($db as $key => $value)
+		{
+			$this->templates['database'] = str_replace(
+				'{'.$key.'}',
+				$value,
+				$this->templates['database']
+			);
+		}
 
-		file_put_contents($folder_name.'application/config/database.php', $this->templates['database']);
+		file_put_contents(
+			$folder_name.'application'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php',
+			$this->templates['database']
+		);
 
 		// Write the index file to the folder root from its template
 		// TODO: ensure the index file is in it's own folder,
@@ -63,20 +89,29 @@ class Installer {
 		file_put_contents($destination.'index.php', $this->templates['index']);
 
 		// Move the necessary files into place unless they already exist
-		if (!is_dir($destination.'application') AND !is_dir($destination.'/system'))
+		if (!is_dir($destination.'application') AND !is_dir($destination.'system'))
 		{
-			recursive_copy($destination.'CodeIgniter-'.$latest_version.'/application', $destination.'/application');
-			recursive_copy($destination.'CodeIgniter-'.$latest_version.'/system', $destination.'/system');
+			recursive_copy(
+				$destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR.'application',
+				$destination.'application'
+			);
+			recursive_copy(
+				$destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR.'system',
+				$destination.'system'
+			);
 		}
 
-		copy($destination.'CodeIgniter-'.$latest_version.'/index.php', $destination.'/index.php');
+		copy(
+			$destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR.'index.php',
+			$destination.'index.php'
+		);
 
 		// Clean up any excess files left behind by the process
 		recursive_delete($destination.'CodeIgniter-'.$latest_version);
-		unlink($destination.$file_name);
+		unlink($destination.$archive_name);
 
 		// Redirect the user to their new site
-		header('Location: index.php');
+		// header('Location: index.php');
 	}
 
 	/**
@@ -93,7 +128,9 @@ class Installer {
 
 if (isset($_POST['base_url']) AND isset($_POST['destination']))
 {
+	$destination = $_POST['destination'];
 	$installer = new Installer($templates);
-	$installer->install($_POST['destination']);
+
+	$installer->install($destination);
 }
 ?>

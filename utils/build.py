@@ -21,9 +21,9 @@ def make_dir(path):
 def install(destination):
 	# Get all of the necessary files for building
 	templates = {
-		'config': file_get_contents('src/templates/config.txt'),
-		'database': file_get_contents('src/templates/database.txt'),
-		'index': file_get_contents('src/templates/index.txt')
+		'config': file_get_contents('src/templates/config.php'),
+		'database': file_get_contents('src/templates/database.php'),
+		'index': file_get_contents('src/templates/index.php')
 	}
 	sources = {
 		'security_check': file_get_contents('src/security_check.php'),
