@@ -7,6 +7,8 @@ class Installer {
 	public function __construct($templates = array())
 	{
 		$this->templates = $templates;
+		$this->application_name = 'CodeIgniter';
+		$this->application_author = 'bcit-ci';
 	}
 
 	/**
@@ -28,20 +30,20 @@ class Installer {
 		// (assuming that each entry is in chronological order with the newest first)
 		// e.g. https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip
 		$latest_version = $this->get_latest_version();
-		$download_url = 'https://github.com/bcit-ci/CodeIgniter/archive/'.$latest_version.'.zip';
+		$download_url = 'https://github.com/'.$this->application_author.'/'.$this->application_name.'/archive/'.$latest_version.'.zip';
 
 		// Download that version of CodeIgniter to the server as a `.zip` file
-		$archive_name = 'CodeIgniter-'.$latest_version.'.zip';
-		$folder_name = $destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR;
+		$archive_name = $this->application_name.'-'.$latest_version.'.zip';
+		$folder_name = $destination.$this->application_name.'-'.$latest_version.DIRECTORY_SEPARATOR;
 		file_put_contents($archive_name, fopen($download_url, 'r'));
 
 		// Unzip the contents of that file to the absolute path
-		$zip = new ZipArchive;
+		$zip_archive = new ZipArchive;
 
-		if (($zip->open($archive_name)) === TRUE)
+		if (($zip_archive->open($archive_name)) === TRUE)
 		{
-			$zip->extractTo($destination);
-			$zip->close();
+			$zip_archive->extractTo($destination);
+			$zip_archive->close();
 		}
 
 		// Get the site configuration from the previous form
@@ -92,26 +94,26 @@ class Installer {
 		if (!is_dir($destination.'application') AND !is_dir($destination.'system'))
 		{
 			recursive_copy(
-				$destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR.'application',
+				$destination.$this->application_name.'-'.$latest_version.DIRECTORY_SEPARATOR.'application',
 				$destination.'application'
 			);
 			recursive_copy(
-				$destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR.'system',
+				$destination.$this->application_name.'-'.$latest_version.DIRECTORY_SEPARATOR.'system',
 				$destination.'system'
 			);
 		}
 
 		copy(
-			$destination.'CodeIgniter-'.$latest_version.DIRECTORY_SEPARATOR.'index.php',
+			$destination.$this->application_name.'-'.$latest_version.DIRECTORY_SEPARATOR.'index.php',
 			$destination.'index.php'
 		);
 
 		// Clean up any excess files left behind by the process
-		recursive_delete($destination.'CodeIgniter-'.$latest_version);
+		recursive_delete($destination.$this->application_name.'-'.$latest_version);
 		unlink($destination.$archive_name);
 
 		// Redirect the user to their new site
-		// header('Location: index.php');
+		header('Location: index.php');
 	}
 
 	/**
