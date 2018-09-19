@@ -26,7 +26,7 @@
 				<p>
 					This is the URL which CodeIgniter uses to find itself.
 					It's usually the domain name of your website, followed by a
-					forward slash `/`. If you're installing it to a subfolder,
+					slash. If you're installing it to a subfolder,
 					add it onto the end. You must also ensure that the protocol
 					is included and correct.
 				</p>
@@ -42,7 +42,7 @@
 					This is turned on by default to prevent people from accessing
 					sensitive files, but may not be supported on all servers.
 				</p>
-				<input class="u-full-width" type="checkbox" name="index_file" checked>
+				<input class="u-full-width" type="checkbox" name="seperate_index_file" checked>
 
 				<hr>
 

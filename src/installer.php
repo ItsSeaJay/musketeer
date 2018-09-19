@@ -103,17 +103,39 @@ class Installer {
 			);
 		}
 
-		copy(
-			$destination.$this->application_name.'-'.$latest_version.DIRECTORY_SEPARATOR.'index.php',
-			$destination.'index.php'
-		);
+		// Optionally write the index template to its own folder
+		if (isset($_POST['seperate_index_file']))
+		{
+			// Create a folder called 'public' if it doesn't already exist
+			if (!is_dir($destination.'public'))
+			{
+				mkdir($destination.'public');
+			}
+
+			// Write the appropriate string template there as the index
+			file_put_contents(
+				$destination.'public'.DIRECTORY_SEPARATOR.'index.php',
+				$this->templates['index']
+			);
+
+			$redirect_url = 'public/index.php';
+		}
+		else
+		{
+			copy(
+				$destination.$this->application_name.'-'.$latest_version.DIRECTORY_SEPARATOR.'index.php',
+				$destination.'index.php'
+			);
+
+			$redirect_url = 'index.php';
+		}
 
 		// Clean up any excess files left behind by the process
 		recursive_delete($destination.$this->application_name.'-'.$latest_version);
 		unlink($destination.$archive_name);
 
 		// Redirect the user to their new site
-		header('Location: index.php');
+		header('Location: '.$redirect_url);
 	}
 
 	/**
@@ -121,7 +143,7 @@ class Installer {
 	*/
 	private function get_latest_version()
 	{
-		$feed = simplexml_load_file('https://github.com/bcit-ci/CodeIgniter/releases.atom');
+		$feed = simplexml_load_file('https://github.com/'.$this->application_author.'/'.$this->application_name.'/releases.atom');
 		$latest_version = $feed->entry[0]->title;
 
 		return $latest_version;
