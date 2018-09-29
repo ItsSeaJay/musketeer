@@ -86,8 +86,6 @@ class Installer {
 		);
 
 		// Write the index file to the folder root from its template
-		// TODO: ensure the index file is in it's own folder,
-		//       or give them the option to do so
 		file_put_contents($destination.'index.php', $this->templates['index']);
 
 		// Move the necessary files into place unless they already exist
@@ -133,6 +131,11 @@ class Installer {
 		// Clean up any excess files left behind by the process
 		recursive_delete($destination.$this->application_name.'-'.$latest_version);
 		unlink($destination.$archive_name);
+
+		if (isset($_POST['seperate_index_file']))
+		{
+			unlink($destination.'index.php');
+		}
 
 		// Redirect the user to their new site
 		header('Location: '.$redirect_url);
